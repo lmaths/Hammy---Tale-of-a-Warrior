@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://clchh8ud0lwfx"]
+
+[ext_resource type="Texture2D" uid="uid://bggmekop78ajs" path="res://Assets/Enemies/Snake/Animations/Walk2.png" id="1_wh2ho"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_34hft"]
+
+[node name="Checkpoint" type="Node2D"]
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+scale = Vector2(3.8, 9.88)
+shape = SubResource("RectangleShape2D_34hft")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_wh2ho")

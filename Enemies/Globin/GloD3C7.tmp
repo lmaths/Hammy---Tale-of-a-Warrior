@@ -1,0 +1,126 @@
+[gd_scene load_steps=19 format=3 uid="uid://cloj7m8kv6hfm"]
+
+[ext_resource type="Script" path="res://Enemies/Globin/Globin.gd" id="1_wdbc2"]
+[ext_resource type="Texture2D" uid="uid://b3e8jr47m7s4g" path="res://Assets/Enemies/Globin/walk1.png" id="2_5is3e"]
+[ext_resource type="Texture2D" uid="uid://de8hxec7x5xj3" path="res://Assets/Enemies/Globin/death1.png" id="2_t8nnh"]
+[ext_resource type="Texture2D" uid="uid://dxyn577vl815j" path="res://Assets/Enemies/Globin/death2.png" id="3_jb1cm"]
+[ext_resource type="Texture2D" uid="uid://bv2cg4bgwua3a" path="res://Assets/Enemies/Globin/walk2.png" id="3_sjyy6"]
+[ext_resource type="Texture2D" uid="uid://dmnq02w523ami" path="res://Assets/Enemies/Globin/walk3.png" id="4_b0l1t"]
+[ext_resource type="Texture2D" uid="uid://bvegvie5ynjn1" path="res://Assets/Enemies/Globin/death3.png" id="4_gowlx"]
+[ext_resource type="Texture2D" uid="uid://s0qdsgh8vh37" path="res://Assets/Enemies/Globin/walk4.png" id="5_1ucrf"]
+[ext_resource type="Texture2D" uid="uid://cqkdeqfsi3bfk" path="res://Assets/Enemies/Globin/death4.png" id="5_7ky4d"]
+[ext_resource type="Texture2D" uid="uid://0ge6vgdjk1hf" path="res://Assets/Enemies/Globin/hurt1.png" id="6_8tsux"]
+[ext_resource type="Texture2D" uid="uid://psim4q1hplt7" path="res://Assets/Enemies/Globin/walk5.png" id="6_rnwon"]
+[ext_resource type="Texture2D" uid="uid://cgmcag5eohrdq" path="res://Assets/Enemies/Globin/hurt2.png" id="7_11b21"]
+[ext_resource type="Texture2D" uid="uid://dmcilg7lh0bom" path="res://Assets/Enemies/Globin/walk6.png" id="7_f8irs"]
+[ext_resource type="Texture2D" uid="uid://cq80aaeeqdgx3" path="res://Assets/Enemies/Globin/hurt3.png" id="8_2805y"]
+[ext_resource type="Script" path="res://Enemies/Globin/Damagable.gd" id="8_mdfi1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uw4d1"]
+size = Vector2(1.55872, 1.8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_qpvnw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_t8nnh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_jb1cm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gowlx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7ky4d")
+}],
+"loop": false,
+"name": &"Die",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_8tsux")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_11b21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_2805y")
+}],
+"loop": false,
+"name": &"Hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_5is3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_sjyy6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_b0l1t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_1ucrf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_rnwon")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_f8irs")
+}],
+"loop": true,
+"name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ysjxv"]
+size = Vector2(42, 50)
+
+[node name="Globin" type="CharacterBody2D" groups=["Enemies"]]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_wdbc2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(5.29727e-05, -1.49999)
+rotation = 1.5708
+scale = Vector2(30.153, 30)
+shape = SubResource("RectangleShape2D_uw4d1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_qpvnw")
+animation = &"Hurt"
+autoplay = "Walk"
+flip_h = true
+
+[node name="GroundDetector" type="RayCast2D" parent="."]
+target_position = Vector2(0, 44)
+collision_mask = 6
+
+[node name="WallDetector" type="RayCast2D" parent="."]
+target_position = Vector2(-32, 0)
+collision_mask = 6
+
+[node name="Damageable" type="Node" parent="."]
+script = ExtResource("8_mdfi1")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-28, -3)
+shape = SubResource("RectangleShape2D_ysjxv")
+
+[node name="PlayerDetectorLeft" type="RayCast2D" parent="."]
+scale = Vector2(1, 14)
+target_position = Vector2(-100, 0)
+
+[node name="PlayerDetectorRight" type="RayCast2D" parent="."]
+scale = Vector2(1, 14)
+target_position = Vector2(100, 0)
+
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
